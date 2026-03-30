@@ -65,6 +65,7 @@ def run_scheduler():
         time.sleep(60)
 
 def main():
+    threading.Thread(target=run_flask, daemon=True).start()
     threading.Thread(target=run_scheduler, daemon=True).start()
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
