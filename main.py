@@ -20,6 +20,7 @@ flask_app = Flask(__name__)
 
 @flask_app.route("/")
 def home():
+    return "William is running!"
 
 def run_flask():
     port = int(os.environ.get("PORT", 8080))
@@ -34,7 +35,7 @@ def ask_groq(prompt):
     except Exception as e:
         return f"Error: {e}"
 
-RSS_FEEDS = ["https://techcrunch.com/feed/", "https://feeds.feedburner.com/TheHackersNews", "https://www.wired.com/feed/rss"]
+RSS_FEEDS = ["https://techcrunch.com/feed/", "https://feeds.feedburner.com/TheHackersNews"]
 posted_links = set()
 
 def fetch_and_post_news():
@@ -47,10 +48,7 @@ def fetch_and_post_news():
                     continue
                 title = entry.get("title", "")
                 summary = entry.get("summary", "")[:400]
-                prompt = f"You are ByteReport tech news editor. Format professionally:
-Title: {title}
-Summary: {summary}
-Rules: emoji+category, 3-4 lines, Why it matters, 3 hashtags"
+                prompt = f"You are ByteReport tech news editor. Format professionally. Title: {title}. Summary: {summary}. Rules: emoji+category, 3-4 lines, Why it matters, 3 hashtags"
                 formatted = ask_groq(prompt)
                 if formatted:
                     requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={"chat_id": CHANNEL, "text": formatted}, timeout=10)
@@ -60,6 +58,7 @@ Rules: emoji+category, 3-4 lines, Why it matters, 3 hashtags"
             logger.error(f"Feed error: {e}")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Hey! I am William! Just message me anything!")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Thinking...")
@@ -83,6 +82,7 @@ def main():
     bot.add_handler(CommandHandler("start", start))
     bot.add_handler(CommandHandler("postnow", post_now))
     bot.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    logger.info("William is running!")
     bot.run_polling()
 
 if __name__ == "__main__":
