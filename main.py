@@ -5,6 +5,7 @@ import feedparser
 import schedule
 import time
 import threading
+from flask import Flask
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 
@@ -15,9 +16,18 @@ CHANNEL = "@BYTEREPORT"
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+flask_app = Flask(__name__)
+
+@flask_app.route("/")
+def home():
+
+def run_flask():
+    port = int(os.environ.get("PORT", 8080))
+    flask_app.run(host="0.0.0.0", port=port)
+
 def ask_groq(prompt):
     headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
-    body = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}], "max_tokens": 1024, "temperature": 0.7}
+    body = {"model": "llama-3.3-70b-versatile", "messages": [{"role": "user", "content": prompt}], "max_tokens": 1024}
     try:
         res = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=body, timeout=20)
         return res.json()["choices"][0]["message"]["content"].strip()
@@ -37,7 +47,10 @@ def fetch_and_post_news():
                     continue
                 title = entry.get("title", "")
                 summary = entry.get("summary", "")[:400]
-                prompt = f"You are ByteReport tech news editor. Format professionally:\nTitle: {title}\nSummary: {summary}\nRules: emoji+category, 3-4 lines, 'Why it matters:', 3 hashtags"
+                prompt = f"You are ByteReport tech news editor. Format professionally:
+Title: {title}
+Summary: {summary}
+Rules: emoji+category, 3-4 lines, Why it matters, 3 hashtags"
                 formatted = ask_groq(prompt)
                 if formatted:
                     requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={"chat_id": CHANNEL, "text": formatted}, timeout=10)
@@ -47,15 +60,14 @@ def fetch_and_post_news():
             logger.error(f"Feed error: {e}")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("👋 Hey! I'm William!\n\n🤖 Answer questions\n📰 Auto-post ByteReport\n\nJust message me!")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("🤔 Thinking...")
+    await update.message.reply_text("Thinking...")
     response = ask_groq(update.message.text)
     await update.message.reply_text(response)
 
 async def post_now(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("📰 Posting news now...")
+    await update.message.reply_text("Posting news now...")
     threading.Thread(target=fetch_and_post_news).start()
 
 def run_scheduler():
@@ -67,12 +79,11 @@ def run_scheduler():
 def main():
     threading.Thread(target=run_flask, daemon=True).start()
     threading.Thread(target=run_scheduler, daemon=True).start()
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("postnow", post_now))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    logger.info("William is running!")
-    app.run_polling()
+    bot = ApplicationBuilder().token(BOT_TOKEN).build()
+    bot.add_handler(CommandHandler("start", start))
+    bot.add_handler(CommandHandler("postnow", post_now))
+    bot.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    bot.run_polling()
 
 if __name__ == "__main__":
     main()
