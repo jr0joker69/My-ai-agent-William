@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: william-openclaw
+    runtime: node
+    buildCommand: npm install -g openclaw && mkdir -p ~/.openclaw
+    startCommand: bash start.sh
+    envVars:
+      - key: PORT
+        value: 10000
