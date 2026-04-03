@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.3.28",
+    "lastTouchedAt": "2026-04-02T14:55:20.107Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-04-02T14:55:20.005Z",
+    "lastRunVersion": "2026.3.28",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "auth": {
+    "profiles": {
+      "openrouter:default": {
+        "provider": "openrouter",
+        "mode": "api_key"
+      },
+      "groq:manual": {
+        "provider": "groq",
+        "mode": "token"
+      },
+      "google:default": {
+        "provider": "google",
+        "mode": "api_key"
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "google/gemini-2.5-pro",
+        "fallbacks": [
+          "google/gemini-2.5-flash",
+          "mistral/mistral-large-latest",
+          "openrouter/openrouter/auto",
+          "mistral/mistral-small-latest",
+          "groq/llama-3.3-70b-versatile",
+          "huggingface/meta-llama/Llama-3.3-70B-Instruct",
+          "huggingface/mistralai/Mistral-7B-Instruct-v0.3",
+          "groq/llama-3.1-8b-instant"
+        ]
+      },
+      "models": {
+        "openrouter/auto": {
+          "alias": "OpenRouter"
+        },
+        "openrouter/arcee-ai/trinity-large-preview:free": {},
+        "groq/llama-3.3-70b-versatile": {},
+        "google/gemini-3.1-pro-preview": {},
+        "google/gemini-2.5-pro": {}
+      },
+      "workspace": "/home/codespace/.openclaw/workspace",
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8
+      }
+    }
+  },
+  "tools": {
+    "profile": "coding",
+    "web": {
+      "search": {
+        "enabled": true,
+        "provider": "gemini"
+      }
+    }
+  },
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "command-logger": {
+          "enabled": true
+        },
+        "session-memory": {
+          "enabled": true
+        }
+      }
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "dmPolicy": "open",
+      "botToken": "8554029843:AAGSSFiZ6RPJarXdmywhRN9viKH0LCacirY",
+      "allowFrom": [
+        "*"
+      ],
+      "groupPolicy": "open",
+      "streaming": "partial"
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "auto",
+    "auth": {
+      "mode": "token",
+      "token": "07156a1d8db24dc81c5026c2733eb71342247d5708d9b1d6"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "nodes": {
+      "denyCommands": [
+        "camera.snap",
+        "camera.clip",
+        "screen.record",
+        "contacts.add",
+        "calendar.add",
+        "reminders.add",
+        "sms.send"
+      ]
+    }
+  },
+  "skills": {
+    "entries": {
+      "notion": {}
+    }
+  },
+  "plugins": {
+    "entries": {
+      "google": {
+        "enabled": true,
+        "config": {
+          "webSearch": {
+            "apiKey": ""
+          }
+        }
+      }
+    }
+  }
+}
