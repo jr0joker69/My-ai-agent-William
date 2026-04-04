@@ -75,7 +75,11 @@
     "native": "auto",
     "nativeSkills": "auto",
     "restart": true,
-    "ownerDisplay": "raw"
+    "ownerDisplay": "raw",
+    "approvals": {
+      "enabled": true,
+      "channel": "telegram"
+    }
   },
   "session": {
     "dmScope": "per-channel-peer"
@@ -145,11 +149,5 @@
         }
       }
     }
-  },
-  "execApprovals": {
-    "enabled": true,
-    "approvers": [
-      "telegram"
-    ]
   }
 }
