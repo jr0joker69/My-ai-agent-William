@@ -145,5 +145,11 @@
         }
       }
     }
+  },
+  "execApprovals": {
+    "enabled": true,
+    "approvers": [
+      "telegram"
+    ]
   }
 }
