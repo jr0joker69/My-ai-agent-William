@@ -31,7 +31,7 @@
         "primary": "google/gemini-2.5-flash",
         "fallbacks": [
           "mistral/mistral-large-latest",
-          "openrouter/openrouter/auto",
+          "openrouter/auto",
           "mistral/mistral-small-latest",
           "groq/llama-3.3-70b-versatile",
           "groq/llama-3.1-8b-instant"
@@ -41,15 +41,11 @@
         "openrouter/auto": {
           "alias": "OpenRouter"
         },
-        "openrouter/arcee-ai/trinity-large-preview:free": {},
         "groq/llama-3.3-70b-versatile": {},
-        "google/gemini-3.1-pro-preview": {},
+        "google/gemini-2.5-flash": {},
         "google/gemini-2.5-pro": {}
       },
-      "workspace": "/home/codespace/.openclaw/workspace",
-      "compaction": {
-        "mode": "safeguard"
-      },
+      "workspace": "/opt/render/.openclaw/workspace",
       "maxConcurrent": 4,
       "subagents": {
         "maxConcurrent": 8
@@ -94,37 +90,30 @@
     "telegram": {
       "enabled": true,
       "dmPolicy": "open",
-      "botToken": "8554029843:AAGSSFiZ6RPJarXdmywhRN9viKH0LCacirY",
-      "allowFrom": [
-        "*"
-      ],
+      "allowFrom": ["*"],
       "groupPolicy": "open",
       "streaming": "partial"
     }
   },
   "gateway": {
-    "port": 18789,
-    "mode": "local",
+    "port": 10000,
+    "mode": "remote",
     "bind": "auto",
-    "auth": {
-      "mode": "token",
-      "token": "07156a1d8db24dc81c5026c2733eb71342247d5708d9b1d6"
-    },
     "tailscale": {
       "mode": "off",
       "resetOnExit": false
-    },
-    "nodes": {
-      "denyCommands": [
-        "camera.snap",
-        "camera.clip",
-        "screen.record",
-        "contacts.add",
-        "calendar.add",
-        "reminders.add",
-        "sms.send"
-      ]
     }
+  },
+  "nodes": {
+    "denyCommands": [
+      "camera.snap",
+      "camera.clip",
+      "screen.record",
+      "contacts.add",
+      "calendar.add",
+      "reminders.add",
+      "sms.send"
+    ]
   },
   "skills": {
     "entries": {
@@ -134,18 +123,8 @@
   "plugins": {
     "entries": {
       "google": {
-        "enabled": true,
-        "config": {
-          "webSearch": {
-            "apiKey": ""
-          }
-        }
+        "enabled": true
       }
     }
-  },
-  "env": {
-    "MISTRAL_API_KEY": "",
-    "OPENROUTER_API_KEY": "",
-    "GEMINI_API_KEY": ""
   }
 }
